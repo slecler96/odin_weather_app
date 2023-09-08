@@ -1,4 +1,3 @@
-import {currentDayWeatherFactory, futureDayWeatherFactory} from './weatherForecastFactory';
 
 async function getWeatherFromAPI(city) {
     try {
@@ -14,32 +13,49 @@ async function getWeatherFromAPI(city) {
 
 const weatherData = getWeatherFromAPI('Paris')
 
+processWeatherData('Paris') 
 
 async function processWeatherData(city) {
     const weatherData = await getWeatherFromAPI(city)
-    console.log(weatherData.location);
+    
     currentDayWeather = processCurrentDayData(weatherData.current)
-    temp = weatherData.current.temp_c
-    condition = weatherData.current.condition
-    windSpeed = weatherData.current.windSpeed
-    windDir = weatherData.current.windDir
-    precip = weatherData.current.precip
-    humidity = weatherData.current.humidty
+    oneDayForecast = currentDayWeatherFactory(weatherData.forecast.forecastday[1])
+    twoDayForecast = currentDayWeatherFactory(weatherData.forecast.forecastday[2])
+    console.log(currentDayWeather.condition)
 
-    currentDayWeather = currentDayWeatherFactory(temp, condition, windSpeed, windDir, precip, humidty)
+
 }
 
 
 function processCurrentDayData(weatherCurrentDay) {
-    temp = weatherData.current.temp_c
-    condition = weatherData.current.condition
-    windSpeed = weatherData.current.windSpeed
-    windDir = weatherData.current.windDir
-    precip = weatherData.current.precip
-    humidity = weatherData.current.humidty
-    console.log(humidity)
-    currentDayWeather = currentDayWeatherFactory(temp, condition, windSpeed, windDir, precip, humidty)
+    temp = weatherCurrentDay.temp_c;
+    condition = weatherCurrentDay.condition.text;
+    windSpeed = weatherCurrentDay.windSpeed;
+    windDir = weatherCurrentDay.windDir;
+    precip = weatherCurrentDay.precip;
+    humidity = weatherCurrentDay.humidity;
+    currentDayWeather = currentDayWeatherFactory(temp, condition, windSpeed, windDir, precip, humidity);
     return currentDayWeather
 }
 
-console.log(processWeatherData('paris'))
+
+function processForecastData(weatherForecast) {
+    maxTemp = weatherForecast.maxtemp_c;
+    minTemp = weatherForecast.mintemp_c;
+    condition = weatherForecast.condition.text;
+    maxWindSpeed = weatherForecast.maxwind_kph;
+    totalPrecip = weatherForecast.totalprecip_mm;
+    avgHumid = weatherForecast.avghumidity;
+    sunrise = weatherForecast.sunrise;
+    sunset = weatherForecast.sunset;
+    forecastedWeather = futureDayWeatherFactory(minTemp, maxTemp, condition, maxWindSpeed, totalPrecip, avgHumid, sunrise, sunset);
+    return forecastedWeather
+}
+
+const currentDayWeatherFactory = (temp, condition, windSpeed, windDir, precip, humidity) => {
+    return { temp, condition, windSpeed, windDir, precip, humidity };
+  };
+
+const futureDayWeatherFactory = (minTemp, maxTemp, condition, maxWindSpeed, totalPrecip, avgHumid, sunrise, sunset) => {
+    return {minTemp, maxTemp, condition, maxWindSpeed, totalPrecip, avgHumid, sunrise, sunset}
+}
