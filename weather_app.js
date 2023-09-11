@@ -1,6 +1,7 @@
 /**
  * Main
  */
+
 const searchForm = document.getElementById("searchForm");
 const cityInput = document.getElementById("cityInput");
 const searchBtn = document.getElementById("searchBtn");
@@ -22,14 +23,16 @@ const day = days[date.getDay()];
 // only 2 forecast days available in the free subscription to WeatherAPI
 const forecastLimit = 2
 
+// global variables (city and country)
 let currentCity = ""
 let currentCountry = ""
 
-defaultForecast()
 
 /**
  * By default, display weather in Paris
  */
+defaultForecast()
+
 
 async function defaultForecast(){
     let weatherData = await processWeatherData("Paris")
@@ -37,9 +40,10 @@ async function defaultForecast(){
 }
 
 
-
-
-
+/**
+ * Display the weather data in the city entered by the user in the search form
+ * If the city is not found by the API, display an error message
+ */
 searchForm.addEventListener("submit", (e) => {
   e.preventDefault();
 });
@@ -66,7 +70,11 @@ function displayWeatherData (weatherData, currentCity) {
     displayForecastedWeatherData(weatherData);
 }
 
-
+/**
+ * 
+ * Display the real-time weather data in the selected city
+ * 
+ */
 function displayCurrentWeatherData(weatherData, currentCity, currentCountry){
     currentDate.textContent = `${day} ${date.getDate()}/${date.getMonth()}/${date.getFullYear()}`;
     cityDisplay.textContent = `${currentCity}, ${currentCountry}`;
@@ -76,6 +84,12 @@ function displayCurrentWeatherData(weatherData, currentCity, currentCountry){
     currentTemp.textContent = `${weatherData[0].temp} °C`
 }
 
+
+/**
+ * 
+ * Display the 2-days forecast in the selected city
+ * 
+ */
 function displayForecastedWeatherData(weatherData, currentCity, currentCountry){
     for (i = 1; i <= forecastLimit; i++) { 
         let forecastedWeatherData = weatherData[i];
@@ -101,6 +115,13 @@ function displayForecastedWeatherData(weatherData, currentCity, currentCountry){
  * API functions 
  *  
  */
+
+
+/**
+ * 
+ * Fetch the weather data in the  chosen city API WeatherAPI
+ * If the request fails, throw an error
+ */
 async function getWeatherFromAPI(city) {
     try {
         const response = await fetch('https://api.weatherapi.com/v1/forecast.json?key=f5ca21dce1af448a972120856230809&q='
@@ -120,7 +141,10 @@ async function getWeatherFromAPI(city) {
 
 
 
-
+/**
+ * 
+ * Return an array with objects containing real-time and forecasted weather data
+ */
 async function processWeatherData(city) {
     const weatherData = await getWeatherFromAPI(city)
 //    localTime = processLocalTimeData(weatherData)
@@ -133,7 +157,10 @@ async function processWeatherData(city) {
     return [currentDayWeather, oneDayForecast, twoDayForecast]
 }
 
-
+/**
+ * 
+ * Return an object containing the real-time weather data
+ */
 function processCurrentDayData(weatherCurrentDay) {
     temp = weatherCurrentDay.temp_c;
     condition = weatherCurrentDay.condition.text;
@@ -146,7 +173,10 @@ function processCurrentDayData(weatherCurrentDay) {
     return currentDayWeather
 }
 
-
+/**
+ * 
+ * Return an object containing the forecasted weather data
+ */
 function processForecastData(weatherForecast) {
     maxTemp = weatherForecast.maxtemp_c;
     minTemp = weatherForecast.mintemp_c;
@@ -160,6 +190,8 @@ function processForecastData(weatherForecast) {
     forecastedWeather = futureDayWeatherFactory(minTemp, maxTemp, condition, conditionIcon, maxWindSpeed, totalPrecip, avgHumid, sunrise, sunset);
     return forecastedWeather
 }
+
+
 
 const currentDayWeatherFactory = (temp, condition, conditionIcon, windSpeed, windDir, precip, humidity) => {
     return { temp, condition, conditionIcon, windSpeed, windDir, precip, humidity };
