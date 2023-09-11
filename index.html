@@ -5,12 +5,15 @@
     <link rel="stylesheet" href="styles.css"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Weather App</title>
+    <script src="weather_app.js" defer></script>
 </head>
 <body>
-    <form action="#">
+    <form action="#" id="searchForm">
         <label for="city">City:</label>
-        <input type="text" id="city" placeholder="Paris" name="city">
+        <input type="text" id="cityInput" placeholder="Paris" name="city">
+        <button id="searchBtn" type="submit">
+            Search
+        </button>
     </form>
 </body>
-<script src="weather_app.js"></script>
 </html>
