@@ -5,6 +5,37 @@ const searchForm = document.getElementById("searchForm");
 const cityInput = document.getElementById("cityInput");
 const searchBtn = document.getElementById("searchBtn");
 
+
+const cityDisplay = document.getElementById("city_display");
+const currentConditionImg = document.getElementById("current_weather_img");
+const currentHumidity = document.getElementById("current_humidity");
+const currentWind = document.getElementById("current_wind");
+const currentTemp = document.getElementById("current_temp");
+const currentDate = document.getElementById("current_date");
+const currentConditionIcon = document.getElementById("current_weather_img");
+
+const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+const date = new Date();
+const day = days[date.getDay()];
+
+let currentLocation = "Paris"
+
+defaultForecast()
+
+/**
+ * By default, display weather in Paris
+ */
+
+async function defaultForecast(){
+    let weatherData = await processWeatherData("Paris")
+    console.log('WEATHER '+weatherData.day0)
+    displayWeatherData(weatherData,currentLocation)
+}
+
+
+
+
+
 searchForm.addEventListener("submit", (e) => {
   e.preventDefault();
 });
@@ -14,7 +45,7 @@ searchBtn.addEventListener("click", async () => {
   try {
     let weatherData = await processWeatherData(cityInput.value);
     console.log(weatherData.day0.humidity)
-    displayWeatherData(weatherData);
+    displayWeatherData(weatherData, currentLocation);
   } catch(err) {
     console.log('There was an error: ',err);
   }
@@ -27,9 +58,19 @@ searchBtn.addEventListener("click", async () => {
  *  
  */
 
-function displayWeatherData (weatherData) {
+function displayWeatherData (weatherData, currentLocation) {
+    displayCurrentWeatherData(weatherData, currentLocation);
+}
 
-    console.log(weatherData.day0.temp)
+
+function displayCurrentWeatherData(weatherData, currentLocation){
+    currentDate.textContent = `${day} ${date.getDate()}/${date.getMonth()}/${date.getFullYear()}`;
+    cityDisplay.textContent = currentLocation;
+    currentHumidity.textContent = `Humidity: ${weatherData.day0.humidity}%`;
+    console.log('humid '+weatherData.day0.humidity)
+    currentWind.textContent = `Wind: ${weatherData.day0.windSpeed} km/h, ${weatherData.day0.windDir}`;
+    currentConditionIcon.src = `https:${weatherData.day0.conditionIcon}`;
+    currentTemp.textContent = weatherData.day0.temp
 }
 
 /**
@@ -47,11 +88,7 @@ async function getWeatherFromAPI(city) {
         } 
         
         const weatherData = await response.json();
-        const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
-        const d = new Date();
-        let day = days[d.getDay()];
-        console.log(day) 
         return weatherData
     } catch (err) {
         throw err;
@@ -65,6 +102,7 @@ async function getWeatherFromAPI(city) {
 async function processWeatherData(city) {
     const weatherData = await getWeatherFromAPI(city)
 //    localTime = processLocalTimeData(weatherData)
+    currentLocation = weatherData.location.name
     currentDayWeather = processCurrentDayData(weatherData.current)
     oneDayForecast = currentDayWeatherFactory(weatherData.forecast.forecastday[1])
     twoDayForecast = currentDayWeatherFactory(weatherData.forecast.forecastday[2])
@@ -76,11 +114,12 @@ async function processWeatherData(city) {
 function processCurrentDayData(weatherCurrentDay) {
     temp = weatherCurrentDay.temp_c;
     condition = weatherCurrentDay.condition.text;
-    windSpeed = weatherCurrentDay.windSpeed;
-    windDir = weatherCurrentDay.windDir;
-    precip = weatherCurrentDay.precip;
+    conditionIcon = weatherCurrentDay.condition.icon;
+    windSpeed = weatherCurrentDay.wind_kph;
+    windDir = weatherCurrentDay.wind_dir;
+    precip = weatherCurrentDay.precip_mm;
     humidity = weatherCurrentDay.humidity;
-    currentDayWeather = currentDayWeatherFactory(temp, condition, windSpeed, windDir, precip, humidity);
+    currentDayWeather = currentDayWeatherFactory(temp, condition, conditionIcon, windSpeed, windDir, precip, humidity);
     return currentDayWeather
 }
 
@@ -89,19 +128,20 @@ function processForecastData(weatherForecast) {
     maxTemp = weatherForecast.maxtemp_c;
     minTemp = weatherForecast.mintemp_c;
     condition = weatherForecast.condition.text;
+    conditionIcon = weatherForecast.condition.icon;
     maxWindSpeed = weatherForecast.maxwind_kph;
     totalPrecip = weatherForecast.totalprecip_mm;
     avgHumid = weatherForecast.avghumidity;
     sunrise = weatherForecast.sunrise;
     sunset = weatherForecast.sunset;
-    forecastedWeather = futureDayWeatherFactory(minTemp, maxTemp, condition, maxWindSpeed, totalPrecip, avgHumid, sunrise, sunset);
+    forecastedWeather = futureDayWeatherFactory(minTemp, maxTemp, condition, conditionIcon, maxWindSpeed, totalPrecip, avgHumid, sunrise, sunset);
     return forecastedWeather
 }
 
-const currentDayWeatherFactory = (temp, condition, windSpeed, windDir, precip, humidity) => {
-    return { temp, condition, windSpeed, windDir, precip, humidity };
+const currentDayWeatherFactory = (temp, condition, conditionIcon, windSpeed, windDir, precip, humidity) => {
+    return { temp, condition, conditionIcon, windSpeed, windDir, precip, humidity };
   };
 
-const futureDayWeatherFactory = (minTemp, maxTemp, condition, maxWindSpeed, totalPrecip, avgHumid, sunrise, sunset) => {
-    return {minTemp, maxTemp, condition, maxWindSpeed, totalPrecip, avgHumid, sunrise, sunset}
+const futureDayWeatherFactory = (minTemp, maxTemp, condition, conditionIcon, maxWindSpeed, totalPrecip, avgHumid, sunrise, sunset) => {
+    return {minTemp, maxTemp, condition, conditionIcon, maxWindSpeed, totalPrecip, avgHumid, sunrise, sunset}
 }

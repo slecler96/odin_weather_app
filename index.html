@@ -12,7 +12,6 @@
         <h1>Weather App</h1>
         <div class="form">
             <form action="#" id="searchForm">
-                <label for="city"></label>
                 <input type="text" id="cityInput" placeholder="Paris" name="city">
                 <button id="searchBtn" type="submit">
                     Search
@@ -22,16 +21,17 @@
     </nav>
     <div class="main_container">
         <div class="current_weather">
-            <h2>Paris</h2>
+            <h2 id="city_display"></h2>
+            <h3 id="current_date"></h3>
             <img src="#" id="current_weather_img" alt="Image of the current weather conditions">
-            <h3>30°C</h3>
-            <p>Humidity: </p>
-            <p>Wind: </p>
+            <h3 id="current_temp">30°C</h3>
+            <p id="current_humidity">Humidity: </p>
+            <p id="current_wind">Wind: </p>
         </div>
         <div class="forecasted_weather">
             <div class="one_day_forecast">
                 <h2>Paris</h2>
-                <img src="#" id="current_weather_img" alt="Image of the current weather conditions">
+                <img src="#" id="day1_weather_img" alt="Image of the weather conditions">
                 <h3>30°C</h3>
                 <p>Humidity: </p>
                 <p>Wind: </p>
@@ -39,7 +39,7 @@
 
             <div class="two_days_forecast">
                 <h2>Paris</h2>
-                <img src="#" id="current_weather_img" alt="Image of the current weather conditions">
+                <img src="#" id="day2_weather_img" alt="Image of the weather conditions">
                 <h3>30°C</h3>
                 <p>Humidity: </p>
                 <p>Wind: </p>

@@ -17,12 +17,13 @@ body {
 }
 
 .nav_bar h1 {
+    text-align: center;
     font-size: 40px;
-    margin-right: 500px;
+    flex:1 0 auto;
 }
 
 .form {
-    margin-right: 10px;
+    text-align: right;
 }
 
 #cityInput {
@@ -56,6 +57,23 @@ body {
     border-radius: 10px;
 }
 
+.current_weather > h3 {
+    margin: 0;
+    padding: 0;
+}
+
+.current_weather > h2 {
+    margin: 0;
+    padding: 5px;
+}
+
+.current_weather > p {
+    margin: 0;
+    padding: 5px;
+}
+
+
+
 
 .forecasted_weather {
     color:#F9FAF8;
@@ -64,6 +82,12 @@ body {
     display: flex;
     align-items: center;
     justify-content: space-evenly;
+}
+
+
+
+#current_weather_img {
+    width: 10rem;
 }
 
 .one_day_forecast {
