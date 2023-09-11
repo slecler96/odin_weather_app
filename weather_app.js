@@ -5,7 +5,7 @@ const searchForm = document.getElementById("searchForm");
 const cityInput = document.getElementById("cityInput");
 const searchBtn = document.getElementById("searchBtn");
 
-
+const errorMessage = document.getElementById("error_message");
 const cityDisplay = document.getElementById("city_display");
 const currentConditionImg = document.getElementById("current_weather_img");
 const currentHumidity = document.getElementById("current_humidity");
@@ -18,7 +18,12 @@ const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", 
 const date = new Date();
 const day = days[date.getDay()];
 
-let currentLocation = "Paris"
+
+// only 2 forecast days available in the free subscription to WeatherAPI
+const forecastLimit = 2
+
+let currentCity = ""
+let currentCountry = ""
 
 defaultForecast()
 
@@ -28,8 +33,7 @@ defaultForecast()
 
 async function defaultForecast(){
     let weatherData = await processWeatherData("Paris")
-    console.log('WEATHER '+weatherData.day0)
-    displayWeatherData(weatherData,currentLocation)
+    displayWeatherData(weatherData, currentCity, currentCountry)
 }
 
 
@@ -44,10 +48,9 @@ searchBtn.addEventListener("click", async () => {
   if (cityInput.value === "") return;
   try {
     let weatherData = await processWeatherData(cityInput.value);
-    console.log(weatherData.day0.humidity)
-    displayWeatherData(weatherData, currentLocation);
+    displayWeatherData(weatherData, currentCity, currentCountry);
   } catch(err) {
-    console.log('There was an error: ',err);
+    errorMessage.textContent = err.message;
   }
 
 });
@@ -58,20 +61,40 @@ searchBtn.addEventListener("click", async () => {
  *  
  */
 
-function displayWeatherData (weatherData, currentLocation) {
-    displayCurrentWeatherData(weatherData, currentLocation);
+function displayWeatherData (weatherData, currentCity) {
+    displayCurrentWeatherData(weatherData, currentCity, currentCountry);
+    displayForecastedWeatherData(weatherData);
 }
 
 
-function displayCurrentWeatherData(weatherData, currentLocation){
+function displayCurrentWeatherData(weatherData, currentCity, currentCountry){
     currentDate.textContent = `${day} ${date.getDate()}/${date.getMonth()}/${date.getFullYear()}`;
-    cityDisplay.textContent = currentLocation;
-    currentHumidity.textContent = `Humidity: ${weatherData.day0.humidity}%`;
-    console.log('humid '+weatherData.day0.humidity)
-    currentWind.textContent = `Wind: ${weatherData.day0.windSpeed} km/h, ${weatherData.day0.windDir}`;
-    currentConditionIcon.src = `https:${weatherData.day0.conditionIcon}`;
-    currentTemp.textContent = weatherData.day0.temp
+    cityDisplay.textContent = `${currentCity}, ${currentCountry}`;
+    currentHumidity.textContent = `Humidity: ${weatherData[0].humidity}%`;
+    currentWind.textContent = `Wind: ${weatherData[0].windSpeed} km/h, ${weatherData[0].windDir}`;
+    currentConditionIcon.src = `https:${weatherData[0].conditionIcon}`;
+    currentTemp.textContent = `${weatherData[0].temp} °C`
 }
+
+function displayForecastedWeatherData(weatherData, currentCity, currentCountry){
+    for (i = 1; i <= forecastLimit; i++) { 
+        let forecastedWeatherData = weatherData[i];
+        let day = document.getElementById("day"+i+"_date");
+        let forecastedConditionImg = document.getElementById("day"+i+"_weather_img");
+        let forecastedMinTemp =  document.getElementById("day"+i+"_min_temp");
+        let forecastedMaxTemp =  document.getElementById("day"+i+"_max_temp");
+        let forecastedWind =  document.getElementById("day"+i+"_wind");
+        let forecastedHumidity = document.getElementById("day"+i+"_humidity");
+
+        day.textContent = days[date.getDay() <= 5  ? date.getDay()+i : 0+(i-1)];
+        forecastedConditionImg.src = `https:${forecastedWeatherData.conditionIcon}`;
+        forecastedMinTemp.textContent = `${forecastedWeatherData.minTemp} °C`;
+        forecastedMaxTemp.textContent = `${forecastedWeatherData.maxTemp} °C`;
+        forecastedWind.textContent  = `Wind: ${forecastedWeatherData.maxWindSpeed} km/h`;
+        forecastedHumidity.textContent = `Humidity: ${forecastedWeatherData.avgHumid}%`;
+    }
+}
+
 
 /**
  * 
@@ -83,8 +106,8 @@ async function getWeatherFromAPI(city) {
         const response = await fetch('https://api.weatherapi.com/v1/forecast.json?key=f5ca21dce1af448a972120856230809&q='
         +city+'&days=3&aqi=no&alerts=no', {mode: 'cors'})
         if (!response.ok) {
-            throw new Error(`City ${city} not found. Please pass a valid US Zipcode, UK Postcode, Canada Postalcode, 
-            IP address, Latitude/Longitude (decimal degree) or city name`)
+            throw new Error(`City "${city}" not found. Please pass a valid city name US Zipcode, UK Postcode, Canada Postalcode, 
+            IP address or Latitude/Longitude (decimal degree).`)
         } 
         
         const weatherData = await response.json();
@@ -95,19 +118,19 @@ async function getWeatherFromAPI(city) {
     }
 };
 
-//const weatherData = getWeatherFromAPI('Paris')
 
 
 
 async function processWeatherData(city) {
     const weatherData = await getWeatherFromAPI(city)
 //    localTime = processLocalTimeData(weatherData)
-    currentLocation = weatherData.location.name
+    currentCity = weatherData.location.name
+    currentCountry = weatherData.location.country
     currentDayWeather = processCurrentDayData(weatherData.current)
-    oneDayForecast = currentDayWeatherFactory(weatherData.forecast.forecastday[1])
-    twoDayForecast = currentDayWeatherFactory(weatherData.forecast.forecastday[2])
-    console.log(currentDayWeather.condition)
-    return {day0: currentDayWeather, day1: oneDayForecast, day2: twoDayForecast}
+
+    oneDayForecast = processForecastData(weatherData.forecast.forecastday[1].day)
+    twoDayForecast = processForecastData(weatherData.forecast.forecastday[2].day)
+    return [currentDayWeather, oneDayForecast, twoDayForecast]
 }
 
 

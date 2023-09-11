@@ -1,9 +1,9 @@
 body {
     background-color:rgb(161, 252, 222);
-    padding: 0;
-    margin: 0;
     text-align: center;
     font-family: 'Roboto', arial;
+    margin: 0;
+    padding: 0;
 }
 
 
@@ -23,7 +23,14 @@ body {
 }
 
 .form {
-    text-align: right;
+    text-align: center;
+    padding: 20px;
+}
+
+.error_message {
+    text-align: center;
+    padding: 10px;
+    color: red;
 }
 
 #cityInput {
@@ -32,6 +39,10 @@ body {
     margin-right: 0;
     padding-right: 0;
     border: transparent
+}
+
+#searchBtn:hover {
+    background-color: grey;
 }
 
 #searchBtn {
@@ -47,7 +58,6 @@ body {
 .current_weather {
     color:#F9FAF8;
     font-size: 20px;
-    margin-top: 70px;
     padding: 10px;
     display: block;
     margin-left: auto;
@@ -72,40 +82,57 @@ body {
     padding: 5px;
 }
 
-
-
-
-.forecasted_weather {
-    color:#F9FAF8;
-    font-size: 20px;
-    padding-top: 70px;
-    display: flex;
-    align-items: center;
-    justify-content: space-evenly;
+.min_temp {
+    color: lightgrey;
+    font-size: 16px;
 }
-
 
 
 #current_weather_img {
     width: 10rem;
 }
 
+
+.forecasted_weather {
+    color:#F9FAF8;
+    font-size: 20px;
+    padding-top: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
 .one_day_forecast {
     background-color: #1F2937;
     padding: 10px;
-    margin-left:350px;
-    margin-right: auto;
-    width: 25rem;
+    width: 15rem;
+    margin-right: 50px;
     border-radius: 10px;
 }
 
 .two_days_forecast {
     background-color: #1F2937;
     padding: 10px;
-    margin-left: auto;
-    margin-right:350px;
-    width: 25rem;
+    width: 15rem;
+    margin-left: 50px;
     border-radius: 10px;
+}
+
+
+.forecasted_weather  h3 {
+    margin: 0;
+    padding: 0;
+}
+
+.forecasted_weather  h2 {
+    margin: 0;
+    padding: 5px;
+}
+
+.forecasted_weather  p {
+    margin: 0;
+    padding: 5px;
 }
 
 footer {

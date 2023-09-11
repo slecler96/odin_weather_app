@@ -10,6 +10,8 @@
 <body>
     <nav class="nav_bar">
         <h1>Weather App</h1>
+    </nav>
+    <div class="main_container">
         <div class="form">
             <form action="#" id="searchForm">
                 <input type="text" id="cityInput" placeholder="Paris" name="city">
@@ -18,31 +20,30 @@
                 </button>
             </form>
         </div>
-    </nav>
-    <div class="main_container">
+        <div class="error_message" id="error_message"></div>
         <div class="current_weather">
             <h2 id="city_display"></h2>
             <h3 id="current_date"></h3>
             <img src="#" id="current_weather_img" alt="Image of the current weather conditions">
             <h3 id="current_temp">30°C</h3>
-            <p id="current_humidity">Humidity: </p>
-            <p id="current_wind">Wind: </p>
+            <p id="current_humidity"></p>
+            <p id="current_wind"></p>
         </div>
         <div class="forecasted_weather">
             <div class="one_day_forecast">
-                <h2>Paris</h2>
-                <img src="#" id="day1_weather_img" alt="Image of the weather conditions">
-                <h3>30°C</h3>
-                <p>Humidity: </p>
-                <p>Wind: </p>
+                <h2 id="day1_date"></h2>
+                <img src="#" id="day1_weather_img" alt="Image of the weather conditions in one day">
+                <h3> <span id="day1_max_temp"></span> <span class="min_temp" id="day1_min_temp"></span> </h3>
+                <p id="day1_humidity"></p>
+                <p id="day1_wind"></p>
             </div>
 
             <div class="two_days_forecast">
-                <h2>Paris</h2>
-                <img src="#" id="day2_weather_img" alt="Image of the weather conditions">
-                <h3>30°C</h3>
-                <p>Humidity: </p>
-                <p>Wind: </p>
+                <h2 id="day2_date"></h2>
+                <img src="#" id="day2_weather_img" alt="Image of the weather conditions in 2 days">
+                <h3> <span id="day2_max_temp"></span> <span class="min_temp" id="day2_min_temp"></span> </h3>
+                <p id="day2_humidity"></p>
+                <p id="day2_wind"></p>
             </div>
         </div>
     </div>
