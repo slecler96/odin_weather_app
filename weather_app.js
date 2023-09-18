@@ -84,7 +84,6 @@ function displayCurrentWeatherData(weatherData, currentCity, currentCountry){
     currentTemp.textContent = `${weatherData[0].temp} °C`
 }
 
-
 /**
  * 
  * Display the 2-days forecast in the selected city
