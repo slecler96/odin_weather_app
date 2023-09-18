@@ -39,7 +39,8 @@ forecastWeatherForCity(defaultCity)
 async function forecastWeatherForCity(city) {
     try {
       let weatherData = await getWeatherData(city);
-      displayWeatherData(weatherData, currentCity, currentCountry);
+      let formattedWeatherData = formatWeatherData(weatherData[0], weatherData[1], weatherData[2])
+      displayWeatherData(formattedWeatherData, currentCity, currentCountry);
     } catch(err) {
       errorMessage.textContent = err.message;
     }
@@ -136,17 +137,25 @@ async function getWeatherFromAPI(city) {
 
 /**
  * 
- * Return an array with objects containing real-time and forecasted weather data
+ * Return an array with objects containing raw real-time and forecasted weather data
  */
 async function getWeatherData(city) {
     const weatherData = await getWeatherFromAPI(city)
     currentCity = weatherData.location.name
     currentCountry = weatherData.location.country
-    currentDayWeather = formatCurrentDayData(weatherData.current)
+    return [weatherData.current, weatherData.forecast.forecastday[1].day, weatherData.forecast.forecastday[2].day]
+}
 
-    oneDayForecast = formatForecastData(weatherData.forecast.forecastday[1].day)
-    twoDayForecast = formatForecastData(weatherData.forecast.forecastday[2].day)
-    return [currentDayWeather, oneDayForecast, twoDayForecast]
+
+/**
+ * 
+ * Return an array with objects containing formatted real-time and forecasted weather data (contains only the weather data displayed in the app)
+ */
+function formatWeatherData(currentDayData, oneDayForecastData, twoDayForecasData) {
+    const currentDayWeather = formatCurrentDayData(currentDayData)
+    const oneDayForecast = formatForecastData(oneDayForecastData)
+    const twoDayForecast = formatForecastData(twoDayForecasData)
+    return [currentDayWeather, oneDayForecast, twoDayForecast]   
 }
 
 /**
