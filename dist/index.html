@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../src/styles.css"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    <script defer src="main.js"></script>
+</head>
+<body>
+    <!-- Header -->
+    <nav class="nav_bar">
+        <h1>Weather App</h1>
+    </nav>
+    <div class="main_container">
+        <!-- Search form -->
+        <div class="form">
+            <form action="#" id="searchForm">
+                <input type="text" id="cityInput" placeholder="Paris" name="city">
+                <button id="searchBtn" type="submit">
+                    Search
+                </button>
+            </form>
+        </div>
+        <!-- Error message displayed if the API request fails -->
+        <div class="error_message" id="error_message"></div>
+        <!-- Display the current weather in the chosen city -->
+        <div class="current_weather">
+            <h2 id="city_display"></h2>
+            <h3 id="current_date"></h3>
+            <img src="#" id="current_weather_img" alt="Image of the current weather conditions">
+            <h3 id="current_temp">30°C</h3>
+            <p id="current_humidity"></p>
+            <p id="current_wind"></p>
+        </div>
+        <!-- Display the 2 days forecasted in the chosen city-->
+        <div class="forecasted_weather">
+            <!-- 1-day forecast -->
+            <div class="one_day_forecast">
+                <h2 id="day1_date"></h2>
+                <img src="#" id="day1_weather_img" alt="Image of the weather conditions in one day">
+                <h3> <span id="day1_max_temp"></span> <span class="min_temp" id="day1_min_temp"></span> </h3>
+                <p id="day1_humidity"></p>
+                <p id="day1_wind"></p>
+            </div>
+            <!-- 2-days forecast -->
+            <div class="two_days_forecast">
+                <h2 id="day2_date"></h2>
+                <img src="#" id="day2_weather_img" alt="Image of the weather conditions in 2 days">
+                <h3> <span id="day2_max_temp"></span> <span class="min_temp" id="day2_min_temp"></span> </h3>
+                <p id="day2_humidity"></p>
+                <p id="day2_wind"></p>
+            </div>
+        </div>
+    </div>
+    <!-- Footer -->
+    <footer>
+        <p>Created by slecler96 2023 </p>
+        <a href=https://github.com/slecler96><img src="../resources/github.png" alt="github icon" height="30px" class="gitimage"/></a></footer>
+</body>
+</html>
