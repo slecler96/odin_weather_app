@@ -18,7 +18,9 @@ const currentConditionIcon = document.getElementById("current_weather_img");
 const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 const date = new Date();
 const day = days[date.getDay()];
+const defaultCity = "Paris";
 
+const APIKEY = "f5ca21dce1af448a972120856230809"
 
 // only 2 forecast days available in the free subscription to WeatherAPI
 const forecastLimit = 2
@@ -31,12 +33,16 @@ let currentCountry = ""
 /**
  * By default, display weather in Paris
  */
-defaultForecast()
+forecastWeatherForCity(defaultCity)
 
 
-async function defaultForecast(){
-    let weatherData = await processWeatherData("Paris")
-    displayWeatherData(weatherData, currentCity, currentCountry)
+async function forecastWeatherForCity(city) {
+    try {
+      let weatherData = await getWeatherData(city);
+      displayWeatherData(weatherData, currentCity, currentCountry);
+    } catch(err) {
+      errorMessage.textContent = err.message;
+    }
 }
 
 
@@ -49,14 +55,9 @@ searchForm.addEventListener("submit", (e) => {
 });
 
 searchBtn.addEventListener("click", async () => {
-  if (cityInput.value === "") return;
-  try {
-    let weatherData = await processWeatherData(cityInput.value);
-    displayWeatherData(weatherData, currentCity, currentCountry);
-  } catch(err) {
-    errorMessage.textContent = err.message;
-  }
-
+    errorMessage.textContent = "";
+    if (cityInput.value === "") return;
+    forecastWeatherForCity(cityInput.value) 
 });
 
 /**
@@ -122,20 +123,13 @@ function displayForecastedWeatherData(weatherData, currentCity, currentCountry){
  * If the request fails, throw an error
  */
 async function getWeatherFromAPI(city) {
-    try {
-        const response = await fetch('https://api.weatherapi.com/v1/forecast.json?key=f5ca21dce1af448a972120856230809&q='
-        +city+'&days=3&aqi=no&alerts=no', {mode: 'cors'})
-        if (!response.ok) {
-            throw new Error(`City "${city}" not found. Please pass a valid city name US Zipcode, UK Postcode, Canada Postalcode, 
-            IP address or Latitude/Longitude (decimal degree).`)
-        } 
-        
-        const weatherData = await response.json();
-
-        return weatherData
-    } catch (err) {
-        throw err;
-    }
+    const response = await fetch(`https://api.weatherapi.com/v1/forecast.json?key=${APIKEY}&q=
+    ${city}&days=3&aqi=no&alerts=no`, {mode: 'cors'})
+    if (!response.ok) {
+        throw new Error(`City "${city}" not found. Please pass a valid city name US Zipcode, UK Postcode, Canada Postalcode, 
+        IP address or Latitude/Longitude (decimal degree).`)
+    } 
+    return response.json();
 };
 
 
@@ -144,15 +138,14 @@ async function getWeatherFromAPI(city) {
  * 
  * Return an array with objects containing real-time and forecasted weather data
  */
-async function processWeatherData(city) {
+async function getWeatherData(city) {
     const weatherData = await getWeatherFromAPI(city)
-//    localTime = processLocalTimeData(weatherData)
     currentCity = weatherData.location.name
     currentCountry = weatherData.location.country
-    currentDayWeather = processCurrentDayData(weatherData.current)
+    currentDayWeather = formatCurrentDayData(weatherData.current)
 
-    oneDayForecast = processForecastData(weatherData.forecast.forecastday[1].day)
-    twoDayForecast = processForecastData(weatherData.forecast.forecastday[2].day)
+    oneDayForecast = formatForecastData(weatherData.forecast.forecastday[1].day)
+    twoDayForecast = formatForecastData(weatherData.forecast.forecastday[2].day)
     return [currentDayWeather, oneDayForecast, twoDayForecast]
 }
 
@@ -160,42 +153,34 @@ async function processWeatherData(city) {
  * 
  * Return an object containing the real-time weather data
  */
-function processCurrentDayData(weatherCurrentDay) {
-    temp = weatherCurrentDay.temp_c;
-    condition = weatherCurrentDay.condition.text;
-    conditionIcon = weatherCurrentDay.condition.icon;
-    windSpeed = weatherCurrentDay.wind_kph;
-    windDir = weatherCurrentDay.wind_dir;
-    precip = weatherCurrentDay.precip_mm;
-    humidity = weatherCurrentDay.humidity;
-    currentDayWeather = currentDayWeatherFactory(temp, condition, conditionIcon, windSpeed, windDir, precip, humidity);
-    return currentDayWeather
+function formatCurrentDayData(weatherCurrentDay) {
+    return {
+        temp: weatherCurrentDay.temp_c,
+        condition: weatherCurrentDay.condition.text,
+        conditionIcon: weatherCurrentDay.condition.icon,
+        windSpeed: weatherCurrentDay.wind_kph,
+        windDir: weatherCurrentDay.wind_dir,
+        precip: weatherCurrentDay.precip_mm,
+        humidity: weatherCurrentDay.humidity,
+    }
 }
 
 /**
  * 
  * Return an object containing the forecasted weather data
  */
-function processForecastData(weatherForecast) {
-    maxTemp = weatherForecast.maxtemp_c;
-    minTemp = weatherForecast.mintemp_c;
-    condition = weatherForecast.condition.text;
-    conditionIcon = weatherForecast.condition.icon;
-    maxWindSpeed = weatherForecast.maxwind_kph;
-    totalPrecip = weatherForecast.totalprecip_mm;
-    avgHumid = weatherForecast.avghumidity;
-    sunrise = weatherForecast.sunrise;
-    sunset = weatherForecast.sunset;
-    forecastedWeather = futureDayWeatherFactory(minTemp, maxTemp, condition, conditionIcon, maxWindSpeed, totalPrecip, avgHumid, sunrise, sunset);
-    return forecastedWeather
+function formatForecastData(weatherForecast) {
+    return {
+        minTemp: weatherForecast.mintemp_c,
+        maxTemp: weatherForecast.maxtemp_c,
+        condition: weatherForecast.condition.text,
+        conditionIcon: weatherForecast.condition.icon,
+        maxWindSpeed: weatherForecast.maxwind_kph,
+        totalPrecip: weatherForecast.totalprecip_mm,
+        avgHumid: weatherForecast.avghumidity,
+        sunrise: weatherForecast.sunrise,
+        sunset: weatherForecast.sunset,
+    }
 }
 
 
-
-const currentDayWeatherFactory = (temp, condition, conditionIcon, windSpeed, windDir, precip, humidity) => {
-    return { temp, condition, conditionIcon, windSpeed, windDir, precip, humidity };
-  };
-
-const futureDayWeatherFactory = (minTemp, maxTemp, condition, conditionIcon, maxWindSpeed, totalPrecip, avgHumid, sunrise, sunset) => {
-    return {minTemp, maxTemp, condition, conditionIcon, maxWindSpeed, totalPrecip, avgHumid, sunrise, sunset}
-}
