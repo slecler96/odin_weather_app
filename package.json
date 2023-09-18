@@ -1,0 +1,17 @@
+{
+  "name": "odin_weather_app_webpack",
+  "version": "1.0.0",
+  "description": "Weather app implemented with JavaScript, HTML, CSS as part of the Odin Project curriculum. It allows the user to search a city and display the weather forecast using WeatherAPI.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "webpack": "^5.88.2",
+    "webpack-cli": "^5.1.4"
+  }
+}
