@@ -43,6 +43,9 @@ function displayCurrentWeatherData(weatherData, currentCity, currentCountry){
  * 
  */
 function displayForecastedWeatherData(weatherData, currentCity, currentCountry){
+    // Tu as vraiment besoin du forecast limit ici ? Tu pourrais pas juste faire weatherData.length ?
+    // Si tu fais ça ça vaut quand même le coup de parler de la limite de 2 jours en commentaires quelque part
+    // Bon après, ton nombre d'éléments est en dur dans ton index.html en fait... donc il vaut mieux laisser tel quel finalement !
     for (let i = 1; i <= forecastLimit; i++) { 
         let forecastedWeatherData = weatherData[i];
         let day = document.getElementById("day"+i+"_date");

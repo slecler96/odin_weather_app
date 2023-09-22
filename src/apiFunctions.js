@@ -28,6 +28,8 @@ async function getWeatherFromAPI(city) {
  */
 async function getWeatherData(city) {
     const weatherData = await getWeatherFromAPI(city)
+    // C'est une mauvaise idée d'avoir un effet de bord ici : cela rend cette fonction pour appeler l'API pas très réutilisable.
+    // Tu ferais mieux de retourner la ville et le pays et de t'occuper de set currentCity et currentCountry dans ton fichier domFunction.js
     currentCity = weatherData.location.name
     currentCountry = weatherData.location.country
     return [weatherData.current, weatherData.forecast.forecastday[1].day, weatherData.forecast.forecastday[2].day]
