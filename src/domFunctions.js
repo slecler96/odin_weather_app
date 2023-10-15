@@ -39,7 +39,7 @@ function displayCurrentWeatherData(weatherData, currentCity, currentCountry){
 
 /**
  * 
- * Display the 2-days forecast in the selected city
+ * Display the 2-days forecast in the selected city (the free version of weatherAPI allows only 2 days forecast)
  * 
  */
 function displayForecastedWeatherData(weatherData, currentCity, currentCountry){

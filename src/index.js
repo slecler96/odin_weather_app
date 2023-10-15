@@ -26,21 +26,21 @@ forecastWeatherForCity(defaultCity)
  */
 searchForm.addEventListener("submit", (e) => {
     e.preventDefault();
-  });
+});
   
-  searchBtn.addEventListener("click", async () => {
-      errorMessage.textContent = "";
-      if (cityInput.value === "") return;
-      forecastWeatherForCity(cityInput.value) 
-  });
+searchBtn.addEventListener("click", async () => {
+    errorMessage.textContent = "";
+    if (cityInput.value === "") return;
+    forecastWeatherForCity(cityInput.value) 
+});
 
-  async function forecastWeatherForCity(city) {
+async function forecastWeatherForCity(city) {
     try {
       let weatherData = await getWeatherData(city);
-      let formattedWeatherData = formatWeatherData(weatherData[0], weatherData[1], weatherData[2])
+//      let formattedWeatherData = formatWeatherData(weatherData[0], weatherData[1], weatherData[2])
       console.log(currentCity)
       console.log(currentCountry)
-      displayWeatherData(formattedWeatherData, currentCity, currentCountry);
+      displayWeatherData(weatherData, currentCity, currentCountry);
     } catch(err) {
       errorMessage.textContent = err.message;
     }

@@ -30,7 +30,8 @@ async function getWeatherData(city) {
     const weatherData = await getWeatherFromAPI(city)
     currentCity = weatherData.location.name
     currentCountry = weatherData.location.country
-    return [weatherData.current, weatherData.forecast.forecastday[1].day, weatherData.forecast.forecastday[2].day]
+    let formattedWeatherData = formatWeatherData(weatherData.current, weatherData.forecast.forecastday[1].day, weatherData.forecast.forecastday[2].day)
+    return formattedWeatherData
 };
 
 
