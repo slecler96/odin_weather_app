@@ -26,8 +26,6 @@ async function getWeatherFromAPI(city) {
  */
 async function getWeatherData(city) {
     const weatherData = await getWeatherFromAPI(city)
-//    currentCity = weatherData.location.name
-//    currentCountry = weatherData.location.country
     let formattedWeatherData = formatWeatherData(weatherData.location.country, weatherData.location.name, weatherData.current, weatherData.forecast.forecastday[1].day, weatherData.forecast.forecastday[2].day)
     return formattedWeatherData
 };
