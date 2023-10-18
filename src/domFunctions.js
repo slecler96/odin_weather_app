@@ -1,7 +1,7 @@
-import {
+/* import {
     currentCity,
     currentCountry
-} from './apiFunctions';
+} from './apiFunctions'; */
 
 // only 2 forecast days available in the free subscription to WeatherAPI
 const forecastLimit = 2
@@ -17,10 +17,15 @@ const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", 
 const date = new Date();
 const day = days[date.getDay()];
 
+// global variables (city and country)
+let currentCity = ""
+let currentCountry = ""
 
-function displayWeatherData (weatherData, currentCity) {
-    displayCurrentWeatherData(weatherData, currentCity, currentCountry);
-    displayForecastedWeatherData(weatherData);
+function displayWeatherData (weatherData) {
+    currentCountry = weatherData[0];
+    currentCity = weatherData[1];
+    displayCurrentWeatherData(weatherData.slice(2), currentCity, currentCountry);
+    displayForecastedWeatherData(weatherData.slice(2));
 };
 
 /**
@@ -42,7 +47,7 @@ function displayCurrentWeatherData(weatherData, currentCity, currentCountry){
  * Display the 2-days forecast in the selected city (the free version of weatherAPI allows only 2 days forecast)
  * 
  */
-function displayForecastedWeatherData(weatherData, currentCity, currentCountry){
+function displayForecastedWeatherData(weatherData){
     for (let i = 1; i <= forecastLimit; i++) { 
         let forecastedWeatherData = weatherData[i];
         let day = document.getElementById("day"+i+"_date");

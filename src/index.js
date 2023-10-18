@@ -1,8 +1,6 @@
 import {
     getWeatherData,
     formatWeatherData,
-    currentCity,
-    currentCountry
 } from './apiFunctions';
 
 import {
@@ -14,6 +12,8 @@ const cityInput = document.getElementById("cityInput");
 const searchBtn = document.getElementById("searchBtn");
 const defaultCity = "Paris";
 const errorMessage = document.getElementById("error_message");
+
+
 
 /**
  * By default, display weather in Paris
@@ -40,9 +40,6 @@ searchBtn.addEventListener("click", async () => {
 
 async function forecastWeatherForCity(city) {
       let weatherData = await getWeatherData(city);
-//      let formattedWeatherData = formatWeatherData(weatherData[0], weatherData[1], weatherData[2])
-      console.log(currentCity)
-      console.log(currentCountry)
       displayWeatherData(weatherData, currentCity, currentCountry);
 };
 
