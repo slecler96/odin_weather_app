@@ -31,18 +31,17 @@ searchForm.addEventListener("submit", (e) => {
 });
   
 searchBtn.addEventListener("click", async () => {
-    errorMessage.textContent = "";
     if (cityInput.value === "") return;
-    try {
-      forecastWeatherForCity(cityInput.value) 
-    } catch(err) {
-      errorMessage.textContent = err.message;
-    }  
+    forecastWeatherForCity(cityInput.value);
 });
 
 async function forecastWeatherForCity(city) {
+    errorMessage.textContent = "";
+    try {
       let weatherData = await getWeatherData(city);
-      console.log('WEATHER DATA '+weatherData[0])
       displayWeatherData(weatherData);
+    } catch(err) {
+      errorMessage.textContent = err.message;
+    }
 };
 
