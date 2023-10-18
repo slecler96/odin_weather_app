@@ -1,8 +1,3 @@
-/* import {
-    currentCity,
-    currentCountry
-} from './apiFunctions'; */
-
 // only 2 forecast days available in the free subscription to WeatherAPI
 const forecastLimit = 2
 const cityDisplay = document.getElementById("city_display");

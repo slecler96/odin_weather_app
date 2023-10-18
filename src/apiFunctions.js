@@ -1,8 +1,6 @@
 const APIKEY = "f5ca21dce1af448a972120856230809"
 
-// global variables (city and country)
-let currentCity = ""
-let currentCountry = ""
+
 
 
 /**
@@ -28,9 +26,9 @@ async function getWeatherFromAPI(city) {
  */
 async function getWeatherData(city) {
     const weatherData = await getWeatherFromAPI(city)
-    currentCity = weatherData.location.name
-    currentCountry = weatherData.location.country
-    let formattedWeatherData = formatWeatherData(weatherData.current, weatherData.forecast.forecastday[1].day, weatherData.forecast.forecastday[2].day)
+//    currentCity = weatherData.location.name
+//    currentCountry = weatherData.location.country
+    let formattedWeatherData = formatWeatherData(weatherData.location.country, weatherData.location.name, weatherData.current, weatherData.forecast.forecastday[1].day, weatherData.forecast.forecastday[2].day)
     return formattedWeatherData
 };
 
@@ -39,11 +37,11 @@ async function getWeatherData(city) {
  * 
  * Return an array with objects containing formatted real-time and forecasted weather data (contains only the weather data displayed in the app)
  */
-function formatWeatherData(currentDayData, oneDayForecastData, twoDayForecasData) {
+function formatWeatherData(currentCountry, currentCity, currentDayData, oneDayForecastData, twoDayForecasData) {
     const currentDayWeather = formatCurrentDayData(currentDayData)
     const oneDayForecast = formatForecastData(oneDayForecastData)
     const twoDayForecast = formatForecastData(twoDayForecasData)
-    return [currentDayWeather, oneDayForecast, twoDayForecast]   
+    return [currentCountry, currentCity, currentDayWeather, oneDayForecast, twoDayForecast]   
 };
 
 /**
@@ -83,7 +81,5 @@ function formatForecastData(weatherForecast) {
 
 export {
     getWeatherData,
-    formatWeatherData,
-    currentCity,
-    currentCountry
+    formatWeatherData
 };
