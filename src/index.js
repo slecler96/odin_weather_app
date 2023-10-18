@@ -40,6 +40,6 @@ searchBtn.addEventListener("click", async () => {
 
 async function forecastWeatherForCity(city) {
       let weatherData = await getWeatherData(city);
-      displayWeatherData(weatherData, currentCity, currentCountry);
+      displayWeatherData(weatherData);
 };
 
