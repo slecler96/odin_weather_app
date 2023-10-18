@@ -19,6 +19,8 @@ let currentCountry = ""
 function displayWeatherData (weatherData) {
     currentCountry = weatherData[0];
     currentCity = weatherData[1];
+    console.log('Country '+weatherData[0]+' '+currentCountry);
+    console.log('City '+weatherData[1]+' '+currentCity);
     displayCurrentWeatherData(weatherData.slice(2), currentCity, currentCountry);
     displayForecastedWeatherData(weatherData.slice(2));
 };
