@@ -5,6 +5,8 @@ import {
 
 import {
     displayWeatherData,
+    currentCountry,
+    currentCity
 } from './domFunctions';
 
 const searchForm = document.getElementById("searchForm");

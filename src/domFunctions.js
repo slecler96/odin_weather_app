@@ -65,5 +65,7 @@ function displayForecastedWeatherData(weatherData){
 };
 
 export {
-    displayWeatherData
+    displayWeatherData,
+    currentCountry,
+    currentCity
 };
